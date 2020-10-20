@@ -1,10 +1,6 @@
-import math
-
-ballspd = 1
-time = 0
-angle = random(PI+0.5 , 2*PI-0.5)
-ballspdX = 0.1 * ballspd
-ballspdY = 0.1 * ballspd
+ballsdp = 10
+ballspdX = random(0.2, 0.3) * ballsdp
+ballspdY = random(0.2, 0.3) * ballsdp
 ballposX = 250
 ballposY = 250
 block_numb = 10
@@ -15,78 +11,64 @@ brickY = 0
 ballRadius = 5
 rectLenght = 50
 rectHeight = 50
-anglemax = PI/ 1.9
-ancienmouseX = 0
 
 
 def setup ():
     size(500, 500)
     block_list_gen()
-    frameRate(120)
+    print(block_list)
+    print  block_list[3][0]
     
     
 def draw ():
-    
     clear()
-    times()
     rec ()
     ballPos()
     wallhit ()
     hit ()
     draw_brick ()
-    hitingBrick ()
-    aleaSpeed() 
-
-
-def times (): 
-    global time, time2
-    time2 = millis() - time
-    print (time2)
-    time = millis()
-
+    hitingBrick () 
     
     
 def rec () :
     if mouseX - 25 < 0.05*width :
-        rect(0.05*width, height - 50, 70, 10, 4)
+        rect(0.05*width, height - 50, 50, 10, 4)
         
     elif mouseX - 25 > 0.85*width :
-        rect(0.85*width, height - 50, 70, 10, 4)
+        rect(0.85*width, height - 50, 50, 10, 4)
         
     else :
-        rect(mouseX - 25, height - 50, 70, 10, 4)
+        rect(mouseX - 25, height - 50, 50, 10, 4)
         
         
         
 def ballPos () :
-    global ballposX, ballposY, ballspdX, ballspdY, ballRadius, angle
-    
-    ballposX += cos(angle) * time2 * ballspdX
-    ballposY -= sin(angle) * time2 * ballspdY
-
+    global ballposX, ballposY, ballspdX, ballspdY, ballRadius
+    ballposX += ballspdX
+    ballposY += ballspdY
     circle(ballposX, ballposY, 2*ballRadius)
     
 def wallhit () :
-    global ballposX, ballposY, ballspdX, ballspdY, ballRadius, angle
-    
+    global ballposX, ballposY, ballspdX, ballspdY, ballRadius
     if ballposX > width - ballRadius :
-        angle = PI - angle
+        ballspdX *= -1
+        #ballposX -= ballRadius
         ballspdX *= random(0.8,1.2)
-        
     elif ballposX - ballRadius < 0 :
-        angle = PI - angle
+        ballspdX *= -1
+        #ballposX += ballRadius
         ballspdX *= random(0.8,1.2)
-        
     elif ballposY - 7 < 0 :
-        angle = - angle
+        ballspdY *= -1
+        #ballposY += ballRadius
         ballspdY *= random(0.8,1.2)
     
         
 def hit ():
-    global ballposX, ballposY, ballspdX, ballspdY, block_list_gen, ballRadius, rectLenght, rectHeight, angle
+    global ballposX, ballposY, ballspdX, ballspdY, block_list_gen, ballRadius, rectLenght, rectHeight
     
-    if mouseX - rectLenght < ballposX < mouseX + rectLenght   and   ballposY + ballRadius < height - ballRadius < ballposY + rectHeight and ballspdY > 0 :
-        angle = - angle
+    if mouseX - rectLenght < ballposX < mouseX + rectLenght   and   ballposY + ballRadius > height - 50 > ballposY + rectHeight and ballspdY > 0 :
+        ballspdY *= -1
         
 def block_list_gen () :
     global block_numb, block_list, brickX, brickY
@@ -114,7 +96,7 @@ def hitingBrick () :
         #                                                     horizontalHAUT                                                                                                 horizontalBAS
                                             
         #                         X                                                    Y                                                         X                                                     Y
-        if block_list[i][0]*20 < ballposX < block_list[i][0]*20 + 20 and block_list[i][1]*20 + 10 > ballposY + ballRadius > block_list[i][1]*20 or block_list[i][0]*20 < ballposX < block_list[i][0]*20 + 20 and ballposY + ballRadius < block_list[i][1]*20 + 10 : 
+        if block_list[i][0]*20 < ballposX < block_list[i][0]*20 + 20 and ballposY + ballRadius > block_list[i][1]*20 or block_list[i][0]*20 < ballposX < block_list[i][0]*20 + 20 and ballposY + ballRadius < block_list[i][1]*20 + 10 : 
             ballspdY *= -1
        
         
@@ -123,14 +105,7 @@ def hitingBrick () :
         #                            Y                                                          X                                                         Y                                                   X
         elif block_list[i][1]*20 < ballposY < block_list[i][1]*20 + 10 and ballposX - ballRadius < block_list[i][0]*20 + 20 or block_list[i][1]*20 < ballposY < block_list[i][1]*20 + 10 and ballposX + ballRadius < block_list[i][0]*20 : 
             ballspdX *= -1
-
-def aleaSpeed () :
-    global ancienmouseX, ballspd
-    delta = mouseX - ancienmouseX
-    
-    ballspd *= delta
-    
-    ancienmouseX = mouseX
+            
     
             
      
