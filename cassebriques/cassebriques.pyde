@@ -1,8 +1,9 @@
 import math
 
-ballspd = 1
+ballspd = 1.2
+
 time = 0
-angle = random(PI+0.5 , 2*PI-0.5)
+angle = PI/2 * -1 #random(PI+0.5 , 2*PI-0.5)
 ballspdX = 0.1 * ballspd
 ballspdY = 0.1 * ballspd
 ballposX = 250
@@ -13,11 +14,10 @@ brk = True
 brickX = 0
 brickY = 0
 ballRadius = 5
-rectLenght = 50
-rectHeight = 50
 anglemax = PI/ 1.9
 ancienmouseX = 0
-
+racHeight = 10
+racLenght = 70
 
 def setup ():
     size(500, 500)
@@ -28,41 +28,42 @@ def setup ():
 def draw ():
     
     clear()
+    angleAlea ()
     times()
     rec ()
     ballPos()
     wallhit ()
-    hit ()
+    #hit ()
     draw_brick ()
     hitingBrick ()
-    aleaSpeed() 
+    aleaSpeed ()
 
 
 def times (): 
     global time, time2
     time2 = millis() - time
-    print (time2)
     time = millis()
 
     
     
 def rec () :
-    if mouseX - 25 < 0.05*width :
-        rect(0.05*width, height - 50, 70, 10, 4)
+    global racLenght, racHeight
+    if mouseX - racLenght/2 < 0.05*width :
+        rect(0.05*width, 0.85*height , racLenght, racHeight, 4)
         
-    elif mouseX - 25 > 0.85*width :
-        rect(0.85*width, height - 50, 70, 10, 4)
+    elif mouseX - racLenght/2 > 0.85*width :
+        rect(0.85*width, 0.85*height , racLenght, racHeight, 4)
         
     else :
-        rect(mouseX - 25, height - 50, 70, 10, 4)
+        rect(mouseX - racLenght/2, 0.85*height , racLenght, racHeight, 4)
         
         
         
 def ballPos () :
     global ballposX, ballposY, ballspdX, ballspdY, ballRadius, angle
     
-    ballposX += cos(angle) * time2 * ballspdX
-    ballposY -= sin(angle) * time2 * ballspdY
+    ballposX += cos(angle) * time2 * ballspdX * ballspd 
+    ballposY -= sin(angle) * time2 * ballspdY * ballspd
 
     circle(ballposX, ballposY, 2*ballRadius)
     
@@ -84,8 +85,8 @@ def wallhit () :
         
 def hit ():
     global ballposX, ballposY, ballspdX, ballspdY, block_list_gen, ballRadius, rectLenght, rectHeight, angle
-    
-    if mouseX - rectLenght < ballposX < mouseX + rectLenght   and   ballposY + ballRadius < height - ballRadius < ballposY + rectHeight and ballspdY > 0 :
+    #mouseX - racLenght < ballposX < mouseX + racLenght   and   ballposY + ballRadius < 0.9*height + ballRadius  < ballposY + racHeight and ballspdY > 0 :
+    if mouseX - racLenght/2 < ballposX < mouseX + racLenght/2  and     0.85*height < ballposY + ballRadius < 0.85*height + 0.2*racHeight :
         angle = - angle
         
 def block_list_gen () :
@@ -126,11 +127,29 @@ def hitingBrick () :
 
 def aleaSpeed () :
     global ancienmouseX, ballspd
-    delta = mouseX - ancienmouseX
     
-    ballspd *= delta
+    if mouseX - ancienmouseX > 5 :
+        delta = abs(mouseX - ancienmouseX)
+        ancienmouseX = mouseX
+        delta /= 10
+
+    else :
+        delta = 1
+    global delta
     
-    ancienmouseX = mouseX
+def angleAlea () :
+    global racLenght, racHeight, angle, delta, ballspd
+    if mouseX - racLenght/2 < ballposX < mouseX + racLenght / 2   and     0.85*height < ballposY + ballRadius < 0.85*height + 0.2*racHeight :
+        ratio = (100*(ballposX-(mouseX - racLenght/2)) / racLenght)
+        print ("ratio:", ratio)
+        if ratio < 50 :
+            angle =  (PI - ( (PI/2) * (ratio/50) ) ) 
+
+        elif ratio > 50 :
+            angle = ( (PI/2) - ((PI/2)/(ratio/100)) )*-1
+
+
+    
     
             
      
