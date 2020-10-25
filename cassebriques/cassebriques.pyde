@@ -1,9 +1,9 @@
 
 
-ballspd = 1.2
+ballspd = 1.6
 
 time = 0
-angle = PI/2 * -1 #random(PI+0.5 , 2*PI-0.5)
+angle = random(PI+0.5 , 2*PI-0.5) #PI/2 * -1 
 ballspdX = 0.1 * ballspd
 ballspdY = 0.1 * ballspd
 ballposX = 250
@@ -17,12 +17,12 @@ ballRadius = 5
 anglemax = PI/ 1.9
 ancienmouseX = 0
 racHeight = 10
-racLenght = 70
+racLenght = 120
 ballAngleMax = PI/1.99
-bW = 100
-bH = 90
+bW = 60
+bH = 20
 bX = 250 - bW/2
-bY = 250 - bH/2
+bY = 100 - bH/2
 
 def setup ():
     size(500, 500)
@@ -98,29 +98,30 @@ def col () :
         print degrees (angle)
 
 #brick
-     #droite
-    elif ballposX > bX - ballRadius and cos(angle) > 0 and ballposX < bX  :
+    #droite
+    elif bY <= ballposY < bY + bH and ballposX + ballRadius > bX and cos(angle) > 0 and ballposX < bX + bW/10 :
         #angle = PI - angle
         print ("1")
         angle = PI - angle
     
     #gauche
-    elif ballposX - ballRadius < bX + bW and cos(angle) < 0 and ballposX > bX + bW :
+    elif bY <= ballposY < bY + bH and ballposX - ballRadius < bX + bW and cos(angle) < 0 and ballposX > bX + bW - bW/10 :
         #angle = PI - angle
         print ("2")
         angle = PI - angle
     
     #haut
-    elif ballposY - ballRadius < bY + bH and sin(angle) > 0 and ballposY > bY + bH :
+    elif bX <= ballposX < bX + bW and ballposY - ballRadius < bY + bW and sin(angle) > 0 and ballposY > bY + bH - bH/10 :
         #angle = - angle
         print ("3")
         angle = - angle
         
     #bas
-    elif ballposY + ballRadius < bY  and sin(angle) < 0 and ballposY < bY :
+    elif bX <= ballposX < bX + bW and ballposY + ballRadius > bY and sin(angle) < 0 and ballposY < bY + bH/10 :
         #angle = - angle
-        print ("3")
-        #angle = - angle
+        print ("4")
+        angle = - angle
+        
         
 def drawBricks () :
     global ballposX, ballposY, ballRadius, ballspdX, ballspdY, bY, bX, bH, bW
