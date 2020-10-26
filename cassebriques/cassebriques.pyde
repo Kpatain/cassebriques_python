@@ -19,15 +19,13 @@ ancienmouseX = 0
 racHeight = 10
 racLenght = 120
 ballAngleMax = PI/1.99
-bW = 60
-bH = 20
-bX = 250 - bW/2
-bY = 100 - bH/2
 
 def setup ():
     size(500, 500)
     #block_list_gen()
     frameRate(200)
+    drawBricks (250 - bW/2, 100 - bH/2, 60, 20)
+    drawBricks (20 - bW/2, 100 - bH/2, 60, 20)
     
     
 def draw ():
@@ -75,19 +73,25 @@ def col () :
     global ballposX, ballposY, ballspdX, ballspdY, ballRadius, angle, racLenght, racHeight, angle, delta, ballspd, ballAngleMax
     
     #droite
-    if ballposX > width - ballRadius :
+    if ballposX + ballRadius > width  :
         angle = PI - angle
-        ballspdX *= random(0.8,1.2)
+        ballspdX *= random(0.8,1.1)
     
     #gauche
     elif ballposX - ballRadius < 0 :
         angle = PI - angle
-        ballspdX *= random(0.8,1.2)
+        ballspdX *= random(0.8,1.1)
     
     #haut
-    elif ballposY - 7 < 0 :
+    elif ballposY - ballRadius < 0 :
         angle = - angle
-        ballspdY *= random(0.8,1.2)
+        ballspdY *= random(0.8,1.1)
+    
+    #bas
+    elif ballposY + ballRadius > height :
+        angle = - angle
+        ballspdY *= random(0.8,1.1)
+        
 
 
 #rack 
@@ -97,8 +101,16 @@ def col () :
         angle =  PI/2 - ratio * ballAngleMax
         print degrees (angle)
 
-#brick
+
+def drawBricks (bX, bY, bW, bH) :
+    
+s
+    
+    rect (bX, bY, bW, bH)
+    
+    #brick
     #droite
+    '''
     elif bY <= ballposY < bY + bH and ballposX + ballRadius > bX and cos(angle) > 0 and ballposX < bX + bW/10 :
         #angle = PI - angle
         print ("1")
@@ -121,12 +133,41 @@ def col () :
         #angle = - angle
         print ("4")
         angle = - angle
-        
-        
-def drawBricks () :
-    global ballposX, ballposY, ballRadius, ballspdX, ballspdY, bY, bX, bH, bW
+    '''
     
-    rect (bX, bY, bW, bH)
+    if bX < ballposX < bX + bW :
+        if bY < ballposY+ballRadius < bY+bH and ballspdY < 0  :
+            angle = -angle
+            ballposY = bY - ballRadius
+        elif bY < ballposY < bY + bH and ballspdY > 0 :
+            angle = - angle
+            ballposY = bY + bH + ballRadius
+            
+    elif bY < ballposY < bY + bH :
+        if bX < ballposX + ballRadius < bX + bW and ballspd > 0 :
+            angle = PI - angle
+            ballposX = bX - ballRadius
+            
+        elif bX < ballposX - ballRadius < bX + bW and ballspdX < 0 :
+            angle = PI -angle
+            ballposX = bX + bW + ballRadius
+
+    '''
+    
+    if bY <= ballposY < bY + bH :
+        print("en x")
+        if ballposY > bY :
+            print("en haut")
+            if bX ballposX 
+        elif ballposY < bY + bH :
+            print ("en bas")
+    elif bX <= ballposX < bX + bW :
+        print("en y")
+        if ballposX < bX :
+            print("a gauche")
+        elif ballposX > bX + bY :
+            print ("a droite")
+    '''
     
 
    
